@@ -33,7 +33,7 @@ namespace :slack do
 
       post_slack_message(announcement)
     else
-      all_env_vars = ENV.map{|var| var.join(" -> ") }.join("\n")
+      all_env_vars = ENV.map{|var| var.join(" -> ") }.sort.join("\n")
 
       print_local_status %{
         Unable to create Slack Announcement.
