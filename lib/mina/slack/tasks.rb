@@ -13,7 +13,7 @@ after_mina :deploy, :'slack:finished'
 namespace :slack do
 
   task :starting do
-    if slack_url and slack_room
+    if slack_url && slack_room
       announcement = "#{announced_deployer} is deploying #{announced_application_name} to #{announced_stage}"
 
       post_slack_message(announcement)
@@ -24,7 +24,7 @@ namespace :slack do
   end
 
   task :finished do
-    if slack_url and slack_room
+    if slack_url && slack_room
       end_time = Time.now
       start_time = fetch(:start_time)
       elapsed = end_time.to_i - start_time.to_i
@@ -33,7 +33,16 @@ namespace :slack do
 
       post_slack_message(announcement)
     else
-      print_local_status "Unable to create Slack Announcement, no slack details provided."
+      all_env_vars = ENV.map{|var| var.join(" -> ") }.join("\n")
+
+      print_local_status %{
+        Unable to create Slack Announcement.
+        -----------------------------------------
+        Slack Url:   #{slack_url}
+        Slack Room:  #{slack_room}
+        -----------------------------------------
+        #{all_env_vars}
+      }
     end
   end
 
